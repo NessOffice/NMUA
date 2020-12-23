@@ -37,10 +37,10 @@ public class Test {
         private String comment;
         public void read(Scanner in) {
             String line = in.nextLine();
-            String[] a = line.split(", ");
+            String[] a = line.split(",");
             this.type = Type.valueOf(a[0].toUpperCase());
             this.value = a[1];
-            this.mark = Integer.valueOf(a[2]);
+            this.mark = Integer.valueOf(a[2].trim());
             this.comment = a[3];
         }
         public boolean judge(String line) {
@@ -97,6 +97,7 @@ public class Test {
             while (in.hasNext() && it.hasNext()) {
                 String line = in.nextLine();
                 Value v = it.next();
+                // resultout.println(line);
                 if ( v.judge(line) ) {
                     mark += v.getMark();
                     resultout.println(v.comment+": PASS");
