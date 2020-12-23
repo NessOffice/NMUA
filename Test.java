@@ -37,7 +37,7 @@ public class Test {
         private String comment;
         public void read(Scanner in) {
             String line = in.nextLine();
-            String[] a = line.split(",");
+            String[] a = line.split(", ");
             this.type = Type.valueOf(a[0].toUpperCase());
             this.value = a[1];
             this.mark = Integer.valueOf(a[2]);
