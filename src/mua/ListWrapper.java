@@ -62,4 +62,39 @@ class ListWrapper implements Iinput {
     public String next() {
         return list.get(ptr++);
     }
+    public void concat(ListWrapper list2) {
+        for(int i = 0;i < list2.list.size();i++) {
+            list.add(list2.list.get(i));
+        }
+    }
+    public void append(String item) {
+        list.add(item);
+    }
+    public String toString(int beginIndex, int endIndex) {
+        String res = "[";
+        for(int i = beginIndex;i < endIndex;i++) {
+            res += list.get(i);
+            if(i < list.size()-1) {res += " ";}
+        }
+        res += "]";
+        return res;
+    }
+    public String toString(int beginIndex) {
+        return this.toString(beginIndex, list.size());
+    }
+    public String toString() {
+        return this.toString(0, list.size());
+    }
+    public String getFirst() {
+        return list.get(0);
+    }
+    public String getLast() {
+        return list.get(list.size()-1);
+    }
+    public String butFirst() {
+        return this.toString(1);
+    }
+    public String butLast() {
+        return this.toString(0, list.size()-1);
+    }
 }

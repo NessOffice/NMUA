@@ -1,6 +1,7 @@
 package mua;
 
 import java.util.*;
+import java.io.*;
 
 public class Main {
     static HashMap<String, String> globalVarMap = new HashMap<String, String>();
@@ -60,6 +61,7 @@ public class Main {
                 default: return "[Error]parseArithmeticExpr";
             }
         }
+        if("eq".equals(cmd)) return "false";
         return "[Error]parseArithmeticExpr";
     }
 
@@ -166,6 +168,10 @@ public class Main {
 
     static <T extends Iinput> String parseExpr(T in, HashMap<String, String> varMap) {
         String cmd, op1, op2, op3, res;
+        ListWrapper list1;
+        BufferedWriter buf;
+        File file;
+        FileInputStream file_in;
         cmd = in.next();
 
         char fstChar = cmd.charAt(0);
@@ -231,6 +237,9 @@ public class Main {
             case "thing": return thing(parseExpr(in, varMap), varMap);
             case "print":
                 res = parseExpr(in, varMap);
+                if("true".equals(islist(res))) {
+                    res = res.substring(1, res.length()-1);
+                }
                 System.out.println(res);
                 return res;
             case "make":
@@ -262,6 +271,95 @@ public class Main {
             case "export":
                 op1 = parseExpr(in, varMap);
                 return globalVarMap.put(op1, thing(op1, varMap));
+            case "sentence":
+                op1 = parseExpr(in, varMap);
+                op2 = parseExpr(in, varMap);
+                if("true".equals(islist(op1))) {
+                    list1 = new ListWrapper(op1);
+                    if("true".equals(islist(op2))) {
+                        list1.concat(new ListWrapper(op2));
+                    } else {
+                        list1.append(op2);
+                    }
+                    return list1.toString();
+                } else {
+                    return (new ListWrapper("["+op1+" "+op2+"]")).toString();
+                }
+            case "list":
+                op1 = parseExpr(in, varMap);
+                op2 = parseExpr(in, varMap);
+                return (new ListWrapper("["+op1+" "+op2+"]")).toString();
+            case "join":
+                op1 = parseExpr(in, varMap);
+                op2 = parseExpr(in, varMap);
+                list1 = new ListWrapper(op1);
+                list1.append(op2);
+                return list1.toString();
+            case "first":
+                op1 = parseExpr(in, varMap);
+                if("true".equals(islist(op1))) {
+                    return (new ListWrapper(op1)).getFirst();
+                } else {
+                    return ""+op1.charAt(0);
+                }
+            case "last":
+                op1 = parseExpr(in, varMap);
+                if("true".equals(islist(op1))) {
+                    return (new ListWrapper(op1)).getLast();
+                } else {
+                    return ""+op1.charAt(op1.length()-1);
+                }
+            case "butfirst":
+                op1 = parseExpr(in, varMap);
+                if("true".equals(islist(op1))) {
+                    return (new ListWrapper(op1)).butFirst();
+                } else {
+                    return op1.substring(1);
+                }
+            case "butlast":
+                op1 = parseExpr(in, varMap);
+                if("true".equals(islist(op1))) {
+                    return (new ListWrapper(op1)).butLast();
+                } else {
+                    return op1.substring(0, op1.length()-1);
+                }
+            case "save":
+                op1 = parseExpr(in, varMap);
+                try {
+                    buf = new BufferedWriter(new FileWriter(op1));
+                    for(String k: varMap.keySet()) {
+                        buf.write("make \""+k+" "+varMap.get(k));
+                    }
+                    buf.close();
+                } catch (IOException e) {
+                }
+                return op1;
+            case "load":
+                op1 = parseExpr(in, varMap);
+                file = new File(op1);
+                Long filelength = file.length(); 
+                byte[] filecontent = new byte[filelength.intValue()]; 
+                try { 
+                    file_in = new FileInputStream(file); 
+                    file_in.read(filecontent);
+                    file_in.close();
+                } catch (FileNotFoundException e) { 
+                    e.printStackTrace(); 
+                } catch (IOException e) { 
+                    e.printStackTrace(); 
+                }
+                try {
+                    return run(new ListWrapper("["+(new String(filecontent, "UTF-8"))+"]"), varMap);
+                } catch(UnsupportedEncodingException e) {
+                    System.err.println("The OS does not support UTF-8");
+                    e.printStackTrace();
+                    return "false";
+                }
+            case "erall":
+                varMap.clear();
+                return "true";
+            case "poall":
+                return "poall";
             default: // custom function
                 if("false".equals(isname(cmd, varMap))) return "[ERROR]custom - nonexist function";
                 return runFunc(in, thing(cmd, varMap), varMap);

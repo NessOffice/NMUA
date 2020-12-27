@@ -80,7 +80,7 @@ public class Test {
         //  for result output
         PrintWriter resultout = new PrintWriter(
                 new OutputStreamWriter(
-                        new FileOutputStream("myout1223")
+                        new FileOutputStream("myout2310")
                 ));
         //  execution
         int mark = 0;
@@ -97,7 +97,6 @@ public class Test {
             while (in.hasNext() && it.hasNext()) {
                 String line = in.nextLine();
                 Value v = it.next();
-                // resultout.println(line);
                 if ( v.judge(line) ) {
                     mark += v.getMark();
                     resultout.println(v.comment+": PASS");
@@ -105,6 +104,9 @@ public class Test {
                     resultout.println(v.comment+": FAIL");
 //                    resultout.println("###"+line+":"+v.toString()+"###");
                 }
+                // resultout.println("yours: "+line);
+                // resultout.println("stdout: "+v.value);
+                // resultout.println("");
             }
             in.close();
         } catch (Throwable e) {
