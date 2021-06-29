@@ -1,0 +1,19 @@
+make "mallest-divisor [ [n]
+    [return find-divisor :n 2]
+]
+
+make "find-divisor [ [n test-divisor]
+    [if gt square :test-divisor :n 
+        [return :n]
+        [if divides? :test-divisor :n
+            [return :test-divisor]
+            [find-divisor :n add :test-divisor 1]
+]]]
+
+make "divisor? [ [a b]
+    [return eq mod :b :a 0]
+]
+
+make "prime? [ [n]
+    [return eq smallest-divisor :n :n]
+]

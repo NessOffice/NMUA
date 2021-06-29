@@ -373,3 +373,9 @@ public class Main {
         }
     }
 }
+/*
+add 1 2
+add add 1 2
+
+状态机模式
+*/

@@ -1,0 +1,22 @@
+make "expmod [ [base exp m]
+    [if eq :exp 0
+        [return 1]
+        [if even? :exp 
+            [return mod square expmod :base div :exp 2 m m]
+            [return mod mul :base expmod :base sub :exp 1 m m]
+]]]
+
+make "fermat-test [ [n]
+    [make "try-it [ [a]
+        [return eq expmod :a :n :n :a]
+    ]
+    return try-it add random sub :n 1 1
+]]
+
+make "fast-prime? [ [n times]
+    [if eq :times 0
+        [return true]
+        [if fermat-test :n
+            [return fast-prime? :n sub :times 1]
+            [return false]
+]]]

@@ -1,0 +1,6 @@
+make "yang_iter [ [lst lv result] [
+    if isempty :lst 
+        [return join :result 1]
+        [return yang_iter butfirst :lst first :lst join :result add :lv first :lst ]
+]]
+print yang_iter [1 2 1] 0 []

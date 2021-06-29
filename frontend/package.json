@@ -1,0 +1,20 @@
+{
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "local-echo": "wavesoft/local-echo",
+    "vue": "^3.0.5",
+    "xterm": "^4.13.0",
+    "xterm-addon-fit": "^0.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.2.3",
+    "@vue/compiler-sfc": "^3.0.5",
+    "vite": "^2.3.8"
+  }
+}
